@@ -3,7 +3,6 @@ package app_test
 import (
 	"MusicApi/musicInfo/internal/app"
 	"MusicApi/musicInfo/internal/model"
-	"MusicApi/musicInfo/internal/store/random"
 	"bytes"
 	"encoding/json"
 	"net/http"
@@ -38,7 +37,7 @@ func TestInfoHandler(t *testing.T) {
 		{
 			name:         "Internal error",
 			song:         model.TestSongErr(t),
-			expectedCode: 422,
+			expectedCode: 500,
 		},
 		{
 			name:         "No content",
@@ -47,7 +46,7 @@ func TestInfoHandler(t *testing.T) {
 		},
 	}
 
-	tsvc := app.NewTService(t, random.New())
+	tsvc := app.NewTService(t)
 	logtrash := app.NewTLog(t)
 
 	for _, tc := range cases {

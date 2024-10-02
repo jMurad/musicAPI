@@ -13,7 +13,7 @@ func New() *Store {
 	return &Store{}
 }
 
-func (s *Store) Info(song model.Song) (*StoreSongDetail, error) {
+func (s *Store) Info(song model.Song) (*store.StoreSongDetail, error) {
 
 	switch song.Group {
 	case "error":
@@ -22,7 +22,7 @@ func (s *Store) Info(song model.Song) (*StoreSongDetail, error) {
 		return nil, store.ErrSongNotFound
 	}
 
-	return &StoreSongDetail{
+	return &store.StoreSongDetail{
 		ReleaseDate: genReleaseDate(),
 		Text:        genText(),
 		Link:        getLink(),

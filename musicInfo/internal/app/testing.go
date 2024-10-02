@@ -2,8 +2,9 @@ package app
 
 import (
 	"MusicApi/musicInfo/internal/model"
-	"MusicApi/musicInfo/internal/store/random"
+	"MusicApi/musicInfo/internal/store"
 	"context"
+	"errors"
 	"log/slog"
 	"testing"
 )
@@ -41,32 +42,28 @@ func (h *THandler) Enabled(_ context.Context, _ slog.Level) bool {
 }
 
 type Store interface {
-	Info(song model.Song) (*random.StoreSongDetail, error)
+	Info(song model.Song) (*store.StoreSongDetail, error)
 }
 
 type TService struct {
-	T     *testing.T
-	store Store
+	t *testing.T
 }
 
-func NewTService(t *testing.T, store Store) *TService {
+func NewTService(t *testing.T) *TService {
 	return &TService{
-		T:     t,
-		store: store,
+		t: t,
 	}
 }
 
 func (ts TService) Info(song model.Song) (*model.SongDetail, error) {
-	ts.T.Helper()
+	ts.t.Helper()
 
-	sd, err := ts.store.Info(song)
-	if err != nil {
-		return nil, err
+	switch song {
+	case *model.TestSongEmpty(ts.t):
+		return nil, store.ErrSongNotFound
+	case *model.TestSongErr(ts.t):
+		return nil, errors.New("internal error")
 	}
 
-	return &model.SongDetail{
-		ReleaseDate: sd.ReleaseDate,
-		Text:        sd.Text,
-		Link:        sd.Link,
-	}, err
+	return &model.SongDetail{}, nil
 }

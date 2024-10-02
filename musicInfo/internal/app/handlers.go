@@ -84,7 +84,7 @@ func Info(log *slog.Logger, svc Service) http.HandlerFunc {
 		if err != nil {
 			log.Info("failed to get song detail", "song", song)
 
-			rerror(w, r, http.StatusUnprocessableEntity, errors.New("internal error"))
+			rerror(w, r, http.StatusInternalServerError, errors.New("internal error"))
 
 			return
 		}

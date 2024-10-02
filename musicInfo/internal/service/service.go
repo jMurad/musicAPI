@@ -2,11 +2,12 @@ package service
 
 import (
 	"MusicApi/musicInfo/internal/model"
-	"MusicApi/musicInfo/internal/store/random"
+	"MusicApi/musicInfo/internal/store"
+	"errors"
 )
 
 type Store interface {
-	Info(song model.Song) (*random.StoreSongDetail, error)
+	Info(song model.Song) (*store.StoreSongDetail, error)
 }
 
 type Service struct {
@@ -21,6 +22,10 @@ func (s *Service) Info(song model.Song) (*model.SongDetail, error) {
 	storeSD, err := s.store.Info(song)
 	if err != nil {
 		return nil, err
+	}
+
+	if storeSD == nil {
+		return nil, errors.New("nil value")
 	}
 
 	return &model.SongDetail{

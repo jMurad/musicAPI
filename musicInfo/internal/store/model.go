@@ -1,4 +1,4 @@
-package random
+package store
 
 type StoreSongDetail struct {
 	ReleaseDate string `json:"release_date"`
